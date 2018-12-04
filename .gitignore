@@ -1,0 +1,14 @@
+example/vendor/
+example/**/*.log
+example/**/*.sqlite
+example/.idea/
+example/bin/
+example/tmp/
+example/node_modules/
+example/.sass-cache/
+example/*-packr.go
+example/public/assets/
+example/.vscode/
+example/.grifter/
+example/.env
+example/docs/swagger
