@@ -24,13 +24,13 @@ $ swag init -g actions/app.go
 ```sh
 $ go get -u github.com/cippaciong/mw-swaggo
 ```
-And import following in your `actions/app.go` code:
+And import following in your `actions/app.go` code, making sure to modify the last package name properly:
 
 ```go
 import(
     mwswaggo "github.com/cippaciong/mw-swaggo"
     "github.com/cippaciong/mw-swaggo/swaggerFiles"
-    _ "github.com/cippaciong/mw-swaggo/example/docs"
+    _ "github.com/<github_name>/<project_name>/docs"
 )
 ```
 
