@@ -1,4 +1,4 @@
-package mwswaggo
+package buffaloSwagger
 
 import (
 	"errors"

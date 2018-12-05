@@ -7,7 +7,7 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
 
-	mwswaggo "github.com/cippaciong/mw-swaggo"
+	buffaloSwagger "github.com/cippaciong/mw-swaggo"
 	contenttype "github.com/gobuffalo/mw-contenttype"
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
@@ -62,7 +62,7 @@ func App() *buffalo.App {
 		// app.Use(popmw.Transaction(models.DB))
 
 		app.GET("/", HomeHandler)
-		app.GET("/swagger/{doc:.*}", mwswaggo.WrapHandler(swaggerFiles.Handler))
+		app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
 
 	}
 

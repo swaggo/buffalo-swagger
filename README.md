@@ -1,4 +1,4 @@
-# mw-swaggo
+# buffalo-swagger
 
 Buffalo middleware to automatically generate RESTful API documentation with Swagger 2.0.
 
@@ -20,31 +20,31 @@ $ go get github.com/swaggo/swag/cmd/swag
 ```sh
 $ swag init -g actions/app.go
 ```
-4.Download [mw-swaggo](https://github.com/cippaciong/mw-swaggo) by using:
+4.Download [buffalo-swagger](https://github.com/swaggo/buffalo-swagger) by using:
 ```sh
-$ go get -u github.com/cippaciong/mw-swaggo
+$ go get -u github.com/swaggo/buffalo-swagger
 ```
 And import following in your `actions/app.go` code, making sure to modify the last package name properly:
 
 ```go
 import(
-    mwswaggo "github.com/cippaciong/mw-swaggo"
-    "github.com/cippaciong/mw-swaggo/swaggerFiles"
+    buffaloSwagger "github.com/swaggo/buffalo-swagger"
+    "github.com/swaggo/buffalo-swagger/swaggerFiles"
     _ "github.com/<github_name>/<project_name>/docs"
 )
 ```
 
 ### Canonical example:
-For a complete example take a look at the [example directory](https://github.com/cippaciong/mw-swaggo/tree/master/example)
+For a complete example take a look at the [example directory](https://github.com/swaggo/buffalo-swagger/tree/master/example)
 Below you can find an extract from `actions/app.go`
 
 ```go
 package actions
 
 import(
-    mwswaggo "github.com/cippaciong/mw-swaggo"
-    "github.com/cippaciong/mw-swaggo/swaggerFiles"
-    _ "github.com/cippaciong/mw-swaggo/example/docs"
+    buffaloSwagger "github.com/swaggo/buffalo-swagger"
+    "github.com/swaggo/buffalo-swagger/swaggerFiles"
+    _ "github.com/swaggo/buffalo-swagger/example/docs"
 )
 
 [...]
@@ -75,7 +75,7 @@ func App() *buffalo.App {
             SessionName: "_example_session",
         })
     app.GET("/", HomeHandler)
-    app.GET("/swagger/{doc:.*}", mwswaggo.WrapHandler(swaggerFiles.Handler))
+    app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
 
 }
 
