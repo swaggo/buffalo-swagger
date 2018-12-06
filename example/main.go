@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/cippaciong/mw-swaggo/example/actions"
+	"github.com/swaggo/buffalo-swagger/example/actions"
 )
 
 // main is the starting point for your Buffalo application.

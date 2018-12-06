@@ -1,8 +1,8 @@
 package grifts
 
 import (
-	"github.com/cippaciong/mw-swaggo/example/actions"
 	"github.com/gobuffalo/buffalo"
+	"github.com/swaggo/buffalo-swagger/example/actions"
 )
 
 func init() {
