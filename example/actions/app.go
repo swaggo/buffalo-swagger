@@ -7,14 +7,14 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
 
-	buffaloSwagger "github.com/cippaciong/mw-swaggo"
 	contenttype "github.com/gobuffalo/mw-contenttype"
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
+	buffaloSwagger "github.com/swaggo/buffalo-swagger"
 
-	"github.com/cippaciong/mw-swaggo/swaggerFiles"
+	"github.com/swaggo/buffalo-swagger/swaggerFiles"
 
-	_ "github.com/cippaciong/mw-swaggo/example/docs"
+	_ "github.com/swaggo/buffalo-swagger/example/docs"
 )
 
 // ENV is used to help switch settings based on where the
