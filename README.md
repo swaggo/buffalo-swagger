@@ -2,9 +2,10 @@
 
 Buffalo middleware to automatically generate RESTful API documentation with Swagger 2.0.
 
-<!--[![Travis branch](https://img.shields.io/travis/swaggo/echo-swagger/master.svg)](https://travis-ci.org/swaggo/echo-swagger)-->
-<!--[![Codecov branch](https://img.shields.io/codecov/c/github/swaggo/echo-swagger/master.svg)](https://codecov.io/gh/swaggo/echo-swagger)-->
-<!--[![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/echo-swagger)](https://goreportcard.com/report/github.com/swaggo/echo-swagger)-->
+[![Travis branch](https://img.shields.io/travis/swaggo/buffalo-swagger/master.svg)](https://travis-ci.org/swaggo/buffalo-swagger)
+[![Codecov branch](https://img.shields.io/codecov/c/github/swaggo/buffalo-swagger/master.svg)](https://codecov.io/gh/swaggo/buffalo-swagger)
+[![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/buffalo-swagger)](https://goreportcard.com/report/github.com/swaggo/buffalo-swagger)
+[![GoDoc](https://godoc.org/github.com/swaggo/buffalo-swagger?status.svg)](https://godoc.org/github.com/swaggo/buffalo-swagger)
 
 
 ## Usage
