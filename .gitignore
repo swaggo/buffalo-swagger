@@ -1,3 +1,4 @@
+# Buffalo .gitignore
 example/vendor/
 example/**/*.log
 example/**/*.sqlite
@@ -12,3 +13,6 @@ example/.vscode/
 example/.grifter/
 example/.env
 example/docs/swagger
+
+# Swagger dist directory
+dist
