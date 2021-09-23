@@ -3,7 +3,6 @@ module github.com/swaggo/buffalo-swagger
 go 1.15
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gobuffalo/buffalo v0.16.26
 	github.com/gobuffalo/envy v1.9.0
 	github.com/gobuffalo/mw-contenttype v0.0.0-20190129203934-2554e742333b
