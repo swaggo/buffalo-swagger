@@ -41,6 +41,10 @@ func WrapHandler(h *webdav.Handler) buffalo.Handler {
 		case "doc.json":
 			doc, _ := swag.ReadDoc()
 			c.Response().Write([]byte(doc))
+		case "swagger-ui-bundle.js", "swagger-ui.js", "swagger-ui-standalone-preset.js":
+			// The browser needs to interpret JS as a JS scripts
+			c.Response().Header().Add("Content-Type", "application/javascript")
+			h.ServeHTTP(c.Response(), c.Request())
 		case "swagger-ui.css":
 			// The browser needs to interpret CSS as a stylesheet
 			c.Response().Header().Add("Content-Type", "text/css")
