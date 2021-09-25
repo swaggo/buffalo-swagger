@@ -6,6 +6,7 @@ Buffalo middleware to automatically generate RESTful API documentation with Swag
 [![Codecov branch](https://img.shields.io/codecov/c/github/swaggo/buffalo-swagger/master.svg)](https://codecov.io/gh/swaggo/buffalo-swagger)
 [![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/buffalo-swagger)](https://goreportcard.com/report/github.com/swaggo/buffalo-swagger)
 [![GoDoc](https://godoc.org/github.com/swaggo/buffalo-swagger?status.svg)](https://godoc.org/github.com/swaggo/buffalo-swagger)
+[![Release](https://img.shields.io/github/release/swaggo/buffalo-swagger.svg?style=flat-square)](https://github.com/swaggo/buffalo-swagger/releases)
 
 
 ## Usage
