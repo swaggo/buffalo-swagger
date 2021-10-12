@@ -4,6 +4,7 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
+	"path/filepath"
 	"regexp"
 	"sync"
 
@@ -37,6 +38,19 @@ func WrapHandler(h *webdav.Handler) buffalo.Handler {
 			h.Prefix = matches[1]
 		})
 
+		switch filepath.Ext(path) {
+		case ".html":
+			c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+		case ".css":
+			c.Response().Header().Set("Content-Type", "text/css; charset=utf-8")
+		case ".js":
+			c.Response().Header().Set("Content-Type", "application/javascript")
+		case ".json":
+			c.Response().Header().Set("Content-Type", "application/json; charset=utf-8")
+		case ".png":
+			c.Response().Header().Set("Content-Type", "image/png")
+		}
+
 		switch path {
 		case "index.html":
 			s := &pro{
@@ -46,14 +60,6 @@ func WrapHandler(h *webdav.Handler) buffalo.Handler {
 		case "doc.json":
 			doc, _ := swag.ReadDoc()
 			c.Response().Write([]byte(doc))
-		case "swagger-ui-bundle.js", "swagger-ui.js", "swagger-ui-standalone-preset.js":
-			// The browser needs to interpret JS as a JS scripts
-			c.Response().Header().Add("Content-Type", "application/javascript")
-			h.ServeHTTP(c.Response(), c.Request())
-		case "swagger-ui.css":
-			// The browser needs to interpret CSS as a stylesheet
-			c.Response().Header().Add("Content-Type", "text/css")
-			h.ServeHTTP(c.Response(), c.Request())
 		default:
 			h.ServeHTTP(c.Response(), c.Request())
 		}
