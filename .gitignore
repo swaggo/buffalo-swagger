@@ -16,3 +16,5 @@ example/docs/swagger
 
 # Swagger dist directory
 dist
+
+.idea
