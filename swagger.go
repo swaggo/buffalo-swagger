@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"regexp"
+	"sync"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/swaggo/swag"
@@ -13,6 +14,8 @@ import (
 
 // WrapHandler wraps `http.Handler` into `buffalo.Handler`.
 func WrapHandler(h *webdav.Handler) buffalo.Handler {
+	var once sync.Once
+
 	//create a template with name
 	t := template.New("swagger_index.html")
 	index, _ := t.Parse(swagger_index_templ)
@@ -29,8 +32,10 @@ func WrapHandler(h *webdav.Handler) buffalo.Handler {
 			return c.Error(http.StatusNotFound, errors.New("404 page not found"))
 		}
 		path := matches[2]
-		prefix := matches[1]
-		h.Prefix = prefix
+
+		once.Do(func() {
+			h.Prefix = matches[1]
+		})
 
 		switch path {
 		case "index.html":
@@ -51,8 +56,8 @@ func WrapHandler(h *webdav.Handler) buffalo.Handler {
 			h.ServeHTTP(c.Response(), c.Request())
 		default:
 			h.ServeHTTP(c.Response(), c.Request())
-
 		}
+
 		return nil
 	}
 	return fn
