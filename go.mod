@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/packr v1.25.0
 	github.com/gobuffalo/suite v2.8.2+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
-	github.com/microcosm-cc/bluemonday v1.0.5 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.16 // indirect
 	github.com/rs/cors v1.8.0
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/swag v1.7.0
