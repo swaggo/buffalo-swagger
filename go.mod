@@ -14,7 +14,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.16 // indirect
 	github.com/rs/cors v1.8.0
 	github.com/stretchr/testify v1.7.0
-	github.com/swaggo/swag v1.7.0
+	github.com/swaggo/swag v1.7.8
 	github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c
-	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 )
