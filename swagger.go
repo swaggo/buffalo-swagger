@@ -13,68 +13,143 @@ import (
 	"golang.org/x/net/webdav"
 )
 
-// WrapHandler wraps `http.Handler` into `buffalo.Handler`.
-func WrapHandler(h *webdav.Handler) buffalo.Handler {
+// Config stores ginSwagger configuration variables.
+type Config struct {
+	// The url pointing to API definition (normally swagger.json or swagger.yaml). Default is `doc.json`.
+	URL                      string
+	DocExpansion             string
+	InstanceName             string
+	Title                    string
+	DefaultModelsExpandDepth int
+	DeepLinking              bool
+	PersistAuthorization     bool
+}
+
+// URL presents the url pointing to API definition (normally swagger.json or swagger.yaml).
+func URL(url string) func(*Config) {
+	return func(c *Config) {
+		c.URL = url
+	}
+}
+
+// DocExpansion list, full, none.
+func DocExpansion(docExpansion string) func(*Config) {
+	return func(c *Config) {
+		c.DocExpansion = docExpansion
+	}
+}
+
+// DeepLinking set the swagger deep linking configuration.
+func DeepLinking(deepLinking bool) func(*Config) {
+	return func(c *Config) {
+		c.DeepLinking = deepLinking
+	}
+}
+
+// DefaultModelsExpandDepth set the default expansion depth for models
+// (set to -1 completely hide the models).
+func DefaultModelsExpandDepth(depth int) func(*Config) {
+	return func(c *Config) {
+		c.DefaultModelsExpandDepth = depth
+	}
+}
+
+// InstanceName set the instance name that was used to generate the swagger documents
+// Defaults to swag.Name ("swagger").
+func InstanceName(name string) func(*Config) {
+	return func(c *Config) {
+		c.InstanceName = name
+	}
+}
+
+// PersistAuthorization Persist authorization information over browser close/refresh.
+// Defaults to false.
+func PersistAuthorization(persistAuthorization bool) func(*Config) {
+	return func(c *Config) {
+		c.PersistAuthorization = persistAuthorization
+	}
+}
+
+// WrapHandler wraps `http.Handler` into `gin.HandlerFunc`.
+func WrapHandler(handler *webdav.Handler, options ...func(*Config)) buffalo.Handler {
 	var once sync.Once
 
-	//create a template with name
-	t := template.New("swagger_index.html")
-	index, _ := t.Parse(swagger_index_templ)
-
-	type pro struct {
-		Host string
+	var config = Config{
+		URL:                      "doc.json",
+		DocExpansion:             "list",
+		InstanceName:             swag.Name,
+		Title:                    "Swagger UI",
+		DefaultModelsExpandDepth: 1,
+		DeepLinking:              true,
+		PersistAuthorization:     false,
 	}
+
+	for _, c := range options {
+		c(&config)
+	}
+
+	if config.InstanceName == "" {
+		config.InstanceName = swag.Name
+	}
+
+	//create a template with name
+	index, _ := template.New("swagger_index.html").Parse(swaggerIndexTpl)
 
 	var re = regexp.MustCompile(`(.*)(index\.html|doc\.json|favicon-16x16\.png|favicon-32x32\.png|/oauth2-redirect\.html|swagger-ui\.css|swagger-ui\.css\.map|swagger-ui\.js|swagger-ui\.js\.map|swagger-ui-bundle\.js|swagger-ui-bundle\.js\.map|swagger-ui-standalone-preset\.js|swagger-ui-standalone-preset\.js\.map)[\?|.]*`)
 
-	fn := func(c buffalo.Context) error {
+	return func(ctx buffalo.Context) error {
+		if ctx.Request().Method != http.MethodGet {
+			return ctx.Error(http.StatusMethodNotAllowed, errors.New("405 method not allowed"))
+		}
+
 		var matches []string
-		if matches = re.FindStringSubmatch(c.Request().RequestURI); len(matches) != 3 {
-			return c.Error(http.StatusNotFound, errors.New("404 page not found"))
+		if matches = re.FindStringSubmatch(ctx.Request().RequestURI); len(matches) != 3 {
+			return ctx.Error(http.StatusNotFound, errors.New("404 page not found"))
 		}
 		path := matches[2]
 
 		once.Do(func() {
-			h.Prefix = matches[1]
+			handler.Prefix = matches[1]
 		})
 
 		switch filepath.Ext(path) {
 		case ".html":
-			c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+			ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 		case ".css":
-			c.Response().Header().Set("Content-Type", "text/css; charset=utf-8")
+			ctx.Response().Header().Set("Content-Type", "text/css; charset=utf-8")
 		case ".js":
-			c.Response().Header().Set("Content-Type", "application/javascript")
+			ctx.Response().Header().Set("Content-Type", "application/javascript")
 		case ".json":
-			c.Response().Header().Set("Content-Type", "application/json; charset=utf-8")
+			ctx.Response().Header().Set("Content-Type", "application/json; charset=utf-8")
 		case ".png":
-			c.Response().Header().Set("Content-Type", "image/png")
+			ctx.Response().Header().Set("Content-Type", "image/png")
 		}
 
 		switch path {
 		case "index.html":
-			s := &pro{
-				Host: "doc.json", //TODO: provide to customs?
-			}
-			index.Execute(c.Response(), s)
+
+			index.Execute(ctx.Response(), config)
 		case "doc.json":
-			doc, _ := swag.ReadDoc()
-			c.Response().Write([]byte(doc))
+			doc, err := swag.ReadDoc(config.InstanceName)
+			if err != nil {
+				return ctx.Error(http.StatusInternalServerError, errors.New("500 internal server error"))
+			}
+
+			ctx.Response().Write([]byte(doc))
 		default:
-			h.ServeHTTP(c.Response(), c.Request())
+			handler.ServeHTTP(ctx.Response(), ctx.Request())
 		}
 
 		return nil
 	}
-	return fn
 }
 
-const swagger_index_templ = `<!-- HTML for static distribution bundle build -->
+const swaggerIndexTpl = `<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Swagger UI</title>
+  <title>{{.Title}}</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
   <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
@@ -148,7 +223,7 @@ window.onload = function() {
     dom_id: '#swagger-ui',
     validatorUrl: null,
 	defaultModelRendering: "model",
-	defaultModelsExpandDepth: 1,
+    persistAuthorization: {{.PersistAuthorization}},
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset
@@ -156,7 +231,10 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+	layout: "StandaloneLayout",
+    docExpansion: "{{.DocExpansion}}",
+	deepLinking: {{.DeepLinking}},
+	defaultModelsExpandDepth: {{.DefaultModelsExpandDepth}}
   })
 
   window.ui = ui
