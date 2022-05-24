@@ -1,6 +1,7 @@
 package buffaloSwagger
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -30,6 +31,8 @@ func TestWrapHandler(t *testing.T) {
 	w1 := performRequest(http.MethodGet, "/swagger/index.html", router)
 	assert.Equal(t, http.StatusOK, w1.Code)
 	assert.Equal(t, w1.Header()["Content-Type"][0], "text/html; charset=utf-8")
+	w1BodyBytes, _ := ioutil.ReadAll(w1.Body)
+	assert.Contains(t, string(w1BodyBytes), "doc.json")
 
 	assert.Equal(t, http.StatusInternalServerError, performRequest(http.MethodGet, "/swagger/doc.json", router).Code)
 
