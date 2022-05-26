@@ -219,7 +219,7 @@ const swaggerIndexTpl = `<!-- HTML for static distribution bundle build -->
 window.onload = function() {
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "{{.Host}}",
+    url: "{{.URL}}",
     dom_id: '#swagger-ui',
     validatorUrl: null,
 	defaultModelRendering: "model",
