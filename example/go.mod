@@ -1,6 +1,6 @@
 module github.com/buffalo-swagger/example
 
-go 1.18
+go 1.17
 
 require (
 	github.com/gobuffalo/buffalo v0.16.26
