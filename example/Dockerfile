@@ -9,7 +9,7 @@ ADD . .
 RUN go get $(go list ./... | grep -v /vendor/)
 RUN buffalo build --static -o /bin/app
 
-FROM alpine
+FROM alpine:3.18.3
 RUN apk add --no-cache bash
 RUN apk add --no-cache ca-certificates
 
